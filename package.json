@@ -1,11 +1,55 @@
 {
   "name": "migratable",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "General purpose migration framework.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "ava": {
+    "files": [
+      "./dist/tests/*.js",
+      "./dist/tests/**/*.js"
+    ],
+    "concurrency": 1,
+    "failFast": true
   },
-  "author": "",
-  "license": "ISC"
+  "scripts": {
+    "clean": "rm -Rf ./dist",
+    "build": "npm run clean; tsc",
+    "example": "npm run build && node dist/example",
+    "lint": "tslint 'src/**/*.ts?(x)'",
+    "prepublish": "npm run build",
+    "test": "npm run build && ava"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xpepermint/migratablejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xpepermint/migratablejs/issues"
+  },
+  "homepage": "https://github.com/xpepermint/migratablejs#readme",
+  "keywords": [
+    "migration",
+    "migrations",
+    "patch",
+    "patcher",
+    "seed",
+    "seeding",
+    "patching",
+    "migrating",
+    "javascript",
+    "nodejs",
+    "typescript"
+  ],
+  "author": "Kristijan Sedlak (Xpepermint)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^7.0.14",
+    "ava": "^0.19.1",
+    "tslint": "^5.1.0",
+    "typescript": "^2.2.2"
+  },
+  "dependencies": {
+    "mz": "2.6.0"
+  }
 }
