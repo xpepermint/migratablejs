@@ -123,9 +123,9 @@ var Migrator = (function () {
     Migrator.prototype.downgrade = function (steps) {
         if (steps === void 0) { steps = -1; }
         return __awaiter(this, void 0, void 0, function () {
-            var stepsPerformed, lastIndex, recipes, _a, _b, _i, i, recipe;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var stepsPerformed, lastIndex, recipes, i, recipe, nextRecipe;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
                     case 0:
                         if (steps === -1) {
                             steps = this.recipes.length;
@@ -133,16 +133,12 @@ var Migrator = (function () {
                         stepsPerformed = 0;
                         return [4, this.lastIndex()];
                     case 1:
-                        lastIndex = _c.sent();
-                        recipes = this.recipes.reverse();
-                        _a = [];
-                        for (_b in recipes)
-                            _a.push(_b);
-                        _i = 0;
-                        _c.label = 2;
+                        lastIndex = _a.sent();
+                        recipes = this.recipes;
+                        i = recipes.length - 1;
+                        _a.label = 2;
                     case 2:
-                        if (!(_i < _a.length)) return [3, 7];
-                        i = _a[_i];
+                        if (!(i >= 0)) return [3, 7];
                         recipe = recipes[i];
                         if (steps <= stepsPerformed) {
                             return [3, 7];
@@ -153,16 +149,18 @@ var Migrator = (function () {
                         if (!recipe.downgrade) return [3, 4];
                         return [4, recipe.downgrade(this.ctx)];
                     case 3:
-                        _c.sent();
-                        _c.label = 4;
-                    case 4: return [4, fs.writeFile(this.cacheFilePath, recipe.index)];
-                    case 5:
-                        _c.sent();
-                        lastIndex = recipe.index;
+                        _a.sent();
+                        _a.label = 4;
+                    case 4:
+                        nextRecipe = recipes[i - 1];
+                        lastIndex = nextRecipe ? nextRecipe.index : -1;
                         stepsPerformed++;
-                        _c.label = 6;
+                        return [4, fs.writeFile(this.cacheFilePath, lastIndex)];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
                     case 6:
-                        _i++;
+                        i--;
                         return [3, 2];
                     case 7: return [2, lastIndex];
                 }

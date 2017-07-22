@@ -92,7 +92,7 @@ test.serial("method `downgrade` runs migrations", async (t) => {
   let index = await migrator.downgrade();
 
   t.is(count, 3);
-  t.is(index, 1);
+  t.is(index, -1);
 });
 
 test.serial("method `downgrade` performs only a certain number of migrations", async (t) => {
@@ -117,5 +117,5 @@ test.serial("method `downgrade` performs only a certain number of migrations", a
   let index = await migrator.downgrade(2);
 
   t.is(count, 2);
-  t.is(index, 3);
+  t.is(index, 1);
 });

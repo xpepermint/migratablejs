@@ -114,9 +114,9 @@ export class Migrator {
 
     let stepsPerformed = 0;
     let lastIndex = await this.lastIndex();
-    let recipes = this.recipes.reverse();
+    let recipes = this.recipes;
 
-    for (let i in recipes) {
+    for (let i = recipes.length - 1; i >= 0; i--) {
       let recipe = recipes[i];
 
       if (steps <= stepsPerformed) {
@@ -129,10 +129,12 @@ export class Migrator {
       if (recipe.downgrade) {
         await recipe.downgrade(this.ctx);
       }
-      await fs.writeFile(this.cacheFilePath, recipe.index);
 
-      lastIndex = recipe.index;
+      let nextRecipe = recipes[i - 1];
+      lastIndex = nextRecipe ? nextRecipe.index : -1;
       stepsPerformed++;
+
+      await fs.writeFile(this.cacheFilePath, lastIndex);
     }
 
     return lastIndex;

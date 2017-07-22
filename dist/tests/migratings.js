@@ -175,7 +175,7 @@ ava_1["default"].serial("method `downgrade` runs migrations", function (t) { ret
             case 2:
                 index = _a.sent();
                 t.is(count, 3);
-                t.is(index, 1);
+                t.is(index, -1);
                 return [2];
         }
     });
@@ -206,7 +206,7 @@ ava_1["default"].serial("method `downgrade` performs only a certain number of mi
             case 2:
                 index = _a.sent();
                 t.is(count, 2);
-                t.is(index, 3);
+                t.is(index, 1);
                 return [2];
         }
     });
