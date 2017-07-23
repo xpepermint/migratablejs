@@ -62,4 +62,19 @@ ava_1["default"].serial("method `perform` runs seed operations", function (t) { 
         }
     });
 }); });
-//# sourceMappingURL=seeding.js.map
+ava_1["default"].serial("method `addDir` loads seeds from directory", function (t) { return __awaiter(_this, void 0, void 0, function () {
+    var seeder;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                seeder = new src_1.Seeder();
+                return [4, seeder.addDir(__dirname + "/assets/seeds")];
+            case 1:
+                _a.sent();
+                t.is(seeder.recipes.length, 1);
+                t.is(seeder.recipes[0].index, 0);
+                return [2];
+        }
+    });
+}); });
+//# sourceMappingURL=seeding.test.js.map

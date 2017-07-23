@@ -35,6 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var path = require("path");
+var fs = require("mz/fs");
 var Seeder = (function () {
     function Seeder(_a) {
         var _b = (_a === void 0 ? {} : _a).ctx, ctx = _b === void 0 ? null : _b;
@@ -43,8 +45,24 @@ var Seeder = (function () {
     }
     Seeder.prototype.add = function (recipe) {
         this.recipes.push(recipe);
-        this.recipes = this.recipes.sort(function (a, b) {
-            return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+    };
+    Seeder.prototype.addDir = function (dirPath) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var fileNames;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, fs.readdir(dirPath)];
+                    case 1:
+                        fileNames = _a.sent();
+                        fileNames.filter(function (fileName) {
+                            return path.extname(fileName) === ".js";
+                        }).forEach(function (fileName) {
+                            _this.add(require(path.join(dirPath, fileName)));
+                        });
+                        return [2];
+                }
+            });
         });
     };
     Seeder.prototype.remove = function (index) {
@@ -54,12 +72,14 @@ var Seeder = (function () {
     };
     Seeder.prototype.perform = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var recipes, lastIndex, _a, _b, _i, i, recipe;
+            var lastIndex, recipes, _a, _b, _i, i, recipe;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        recipes = this.recipes;
                         lastIndex = -1;
+                        recipes = this.recipes.sort(function (a, b) {
+                            return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+                        });
                         _a = [];
                         for (_b in recipes)
                             _a.push(_b);

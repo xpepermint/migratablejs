@@ -1,13 +1,13 @@
 {
   "name": "migratable",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "General purpose migration framework.",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "ava": {
     "files": [
-      "./dist/tests/*.js",
-      "./dist/tests/**/*.js"
+      "./dist/tests/*.test.js",
+      "./dist/tests/**/*.test.js"
     ],
     "concurrency": 1,
     "failFast": true
@@ -50,6 +50,6 @@
     "typescript": "^2.2.2"
   },
   "dependencies": {
-    "mz": "2.6.0"
+    "mz": "^2.6.0"
   }
 }

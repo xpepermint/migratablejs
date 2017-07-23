@@ -211,4 +211,19 @@ ava_1["default"].serial("method `downgrade` performs only a certain number of mi
         }
     });
 }); });
-//# sourceMappingURL=migratings.js.map
+ava_1["default"].serial("method `addDir` loads migrations from directory", function (t) { return __awaiter(_this, void 0, void 0, function () {
+    var migrator;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                migrator = new src_1.Migrator({ cacheFilePath: cacheFilePath });
+                return [4, migrator.addDir(__dirname + "/assets/migrations")];
+            case 1:
+                _a.sent();
+                t.is(migrator.recipes.length, 1);
+                t.is(migrator.recipes[0].index, 0);
+                return [2];
+        }
+    });
+}); });
+//# sourceMappingURL=migratings.test.js.map

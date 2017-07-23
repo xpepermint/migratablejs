@@ -1,3 +1,6 @@
+import * as path from "path";
+import * as fs from "mz/fs";
+
 /**
  * Seed recipe interface.
  */
@@ -11,7 +14,7 @@ export interface SeedRecipe {
  */
 export class Seeder {
   readonly ctx: any;
-  protected recipes: SeedRecipe[] = [];
+  public recipes: SeedRecipe[] = [];
 
   /**
    * Class constructor.
@@ -31,9 +34,19 @@ export class Seeder {
    */
   public add(recipe: SeedRecipe) {
     this.recipes.push(recipe);
+  }
 
-    this.recipes = this.recipes.sort((a, b) => {
-      return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+  /**
+   * Loads seeds from directory.
+   * @param dirPath Path to a folder with seed files.
+   */
+  public async addDir(dirPath: string) {
+    let fileNames = await fs.readdir(dirPath);
+
+    fileNames.filter((fileName) => {
+      return path.extname(fileName) === ".js";
+    }).forEach((fileName) => {
+      this.add(require(path.join(dirPath, fileName)));
     });
   }
 
@@ -51,8 +64,10 @@ export class Seeder {
    * Runs `perform` recipe methods.
    */
   public async perform() {
-    let recipes = this.recipes;
     let lastIndex = -1;
+    let recipes = this.recipes.sort((a, b) => {
+      return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+    });
 
     for (let i in recipes) {
       let recipe = recipes[i];

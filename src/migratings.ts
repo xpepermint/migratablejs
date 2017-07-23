@@ -1,3 +1,4 @@
+import * as path from "path";
 import * as fs from "mz/fs";
 
 /**
@@ -15,7 +16,7 @@ export interface MigrationRecipe {
 export class Migrator {
   readonly ctx: any;
   readonly cacheFilePath: string;
-  protected recipes: MigrationRecipe[] = [];
+  public recipes: MigrationRecipe[] = [];
 
   /**
    * Class constructor.
@@ -39,9 +40,19 @@ export class Migrator {
    */
   public add(recipe: MigrationRecipe) {
     this.recipes.push(recipe);
+  }
 
-    this.recipes = this.recipes.sort((a, b) => {
-      return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+  /**
+   * Loads migrations from directory.
+   * @param dirPath Path to a folder with migration files.
+   */
+  public async addDir(dirPath: string) {
+    let fileNames = await fs.readdir(dirPath);
+
+    fileNames.filter((fileName) => {
+      return path.extname(fileName) === ".js";
+    }).forEach((fileName) => {
+      this.add(require(path.join(dirPath, fileName)));
     });
   }
 
@@ -79,7 +90,9 @@ export class Migrator {
 
     let stepsPerformed = 0;
     let lastIndex = await this.lastIndex();
-    let recipes = this.recipes;
+    let recipes = this.recipes.sort((a, b) => {
+      return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+    });
 
     for (let i in recipes) {
       let recipe = recipes[i];
@@ -114,7 +127,9 @@ export class Migrator {
 
     let stepsPerformed = 0;
     let lastIndex = await this.lastIndex();
-    let recipes = this.recipes;
+    let recipes = this.recipes.sort((a, b) => {
+      return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+    });
 
     for (let i = recipes.length - 1; i >= 0; i--) {
       let recipe = recipes[i];

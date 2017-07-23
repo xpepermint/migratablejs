@@ -35,6 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var path = require("path");
 var fs = require("mz/fs");
 var Migrator = (function () {
     function Migrator(_a) {
@@ -45,8 +46,24 @@ var Migrator = (function () {
     }
     Migrator.prototype.add = function (recipe) {
         this.recipes.push(recipe);
-        this.recipes = this.recipes.sort(function (a, b) {
-            return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+    };
+    Migrator.prototype.addDir = function (dirPath) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            var fileNames;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, fs.readdir(dirPath)];
+                    case 1:
+                        fileNames = _a.sent();
+                        fileNames.filter(function (fileName) {
+                            return path.extname(fileName) === ".js";
+                        }).forEach(function (fileName) {
+                            _this.add(require(path.join(dirPath, fileName)));
+                        });
+                        return [2];
+                }
+            });
         });
     };
     Migrator.prototype.remove = function (index) {
@@ -85,7 +102,9 @@ var Migrator = (function () {
                         return [4, this.lastIndex()];
                     case 1:
                         lastIndex = _c.sent();
-                        recipes = this.recipes;
+                        recipes = this.recipes.sort(function (a, b) {
+                            return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+                        });
                         _a = [];
                         for (_b in recipes)
                             _a.push(_b);
@@ -134,7 +153,9 @@ var Migrator = (function () {
                         return [4, this.lastIndex()];
                     case 1:
                         lastIndex = _a.sent();
-                        recipes = this.recipes;
+                        recipes = this.recipes.sort(function (a, b) {
+                            return (a.index > b.index) ? 1 : ((b.index > a.index) ? -1 : 0);
+                        });
                         i = recipes.length - 1;
                         _a.label = 2;
                     case 2:

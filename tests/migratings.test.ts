@@ -1,3 +1,4 @@
+import * as path from "path";
 import * as fs from "mz/fs";
 import test from "ava";
 import { Migrator } from "../src";
@@ -118,4 +119,12 @@ test.serial("method `downgrade` performs only a certain number of migrations", a
 
   t.is(count, 2);
   t.is(index, 1);
+});
+
+test.serial("method `addDir` loads migrations from directory", async (t) => {
+  let migrator = new Migrator({ cacheFilePath });
+  await migrator.addDir(`${__dirname}/assets/migrations`);
+
+  t.is(migrator.recipes.length, 1);
+  t.is(migrator.recipes[0].index, 0);
 });

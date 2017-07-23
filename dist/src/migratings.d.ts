@@ -6,12 +6,13 @@ export interface MigrationRecipe {
 export declare class Migrator {
     readonly ctx: any;
     readonly cacheFilePath: string;
-    protected recipes: MigrationRecipe[];
+    recipes: MigrationRecipe[];
     constructor({ctx, cacheFilePath}?: {
         ctx?: any;
         cacheFilePath?: string;
     });
     add(recipe: MigrationRecipe): void;
+    addDir(dirPath: string): Promise<void>;
     remove(index: number): void;
     lastIndex(): Promise<number>;
     upgrade(steps?: number): Promise<number>;

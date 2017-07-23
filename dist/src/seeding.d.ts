@@ -4,11 +4,12 @@ export interface SeedRecipe {
 }
 export declare class Seeder {
     readonly ctx: any;
-    protected recipes: SeedRecipe[];
+    recipes: SeedRecipe[];
     constructor({ctx}?: {
         ctx?: any;
     });
     add(recipe: SeedRecipe): void;
+    addDir(dirPath: string): Promise<void>;
     remove(index: number): void;
     perform(): Promise<number>;
 }

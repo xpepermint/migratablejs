@@ -54,6 +54,8 @@ migrator.downgrade().then((index) => { // upgrade optionally accepts the number 
 });
 ```
 
+You can also use `migrator.addDir("./seeds")` to load migrations from folder.
+
 ### Seeding
 
 Seed operations are similar to migrations. The difference is only that they can be performed multiple times.
@@ -79,6 +81,8 @@ seeder.perform().then(() => {
   console.log(err);
 });
 ```
+
+You can also use `seeder.addDir("./seeds")` to load seeds from folder.
 
 ## License (MIT)
 
