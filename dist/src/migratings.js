@@ -39,7 +39,7 @@ var path = require("path");
 var fs = require("mz/fs");
 var Migrator = (function () {
     function Migrator(_a) {
-        var _b = _a === void 0 ? {} : _a, _c = _b.ctx, ctx = _c === void 0 ? null : _c, _d = _b.cacheFilePath, cacheFilePath = _d === void 0 ? "./migratable.cache" : _d;
+        var _b = _a === void 0 ? {} : _a, _c = _b.ctx, ctx = _c === void 0 ? null : _c, _d = _b.cacheFilePath, cacheFilePath = _d === void 0 ? './migratable.cache' : _d;
         this.recipes = [];
         this.ctx = ctx;
         this.cacheFilePath = cacheFilePath;
@@ -56,10 +56,19 @@ var Migrator = (function () {
                     case 0: return [4, fs.readdir(dirPath)];
                     case 1:
                         fileNames = _a.sent();
-                        fileNames.filter(function (fileName) {
-                            return path.extname(fileName) === ".js";
-                        }).forEach(function (fileName) {
-                            _this.add(require(path.join(dirPath, fileName)));
+                        fileNames.forEach(function (fileName) {
+                            var recipe;
+                            try {
+                                recipe = require(path.join(dirPath, fileName));
+                            }
+                            catch (e) { }
+                            var isValid = (!!recipe
+                                && typeof recipe.index !== 'undefined'
+                                && typeof recipe.upgrade !== 'undefined'
+                                && typeof recipe.downgrade !== 'undefined');
+                            if (isValid) {
+                                _this.add(recipe);
+                            }
                         });
                         return [2];
                 }

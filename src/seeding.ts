@@ -1,5 +1,5 @@
-import * as path from "path";
-import * as fs from "mz/fs";
+import * as path from 'path';
+import * as fs from 'mz/fs';
 
 /**
  * Seed recipe interface.
@@ -43,10 +43,18 @@ export class Seeder {
   public async addDir(dirPath: string) {
     let fileNames = await fs.readdir(dirPath);
 
-    fileNames.filter((fileName) => {
-      return path.extname(fileName) === ".js";
-    }).forEach((fileName) => {
-      this.add(require(path.join(dirPath, fileName)));
+    fileNames.forEach((fileName) => {
+      let recipe;
+      try { recipe = require(path.join(dirPath, fileName)); } catch (e) {}
+
+      const isValid = (
+        !!recipe
+        && typeof recipe.index !== 'undefined'
+        && typeof recipe.perform !== 'undefined'
+      );
+      if (isValid) {
+        this.add(recipe);
+      }
     });
   }
 

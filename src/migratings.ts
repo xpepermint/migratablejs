@@ -1,5 +1,5 @@
-import * as path from "path";
-import * as fs from "mz/fs";
+import * as path from 'path';
+import * as fs from 'mz/fs';
 
 /**
  * Migration recipe interface.
@@ -25,7 +25,7 @@ export class Migrator {
    */
   public constructor({
     ctx = null,
-    cacheFilePath = "./migratable.cache",
+    cacheFilePath = './migratable.cache',
   }: {
     ctx?: any;
     cacheFilePath?: string;
@@ -49,10 +49,19 @@ export class Migrator {
   public async addDir(dirPath: string) {
     let fileNames = await fs.readdir(dirPath);
 
-    fileNames.filter((fileName) => {
-      return path.extname(fileName) === ".js";
-    }).forEach((fileName) => {
-      this.add(require(path.join(dirPath, fileName)));
+    fileNames.forEach((fileName) => {
+      let recipe;
+      try { recipe = require(path.join(dirPath, fileName)); } catch (e) {}
+
+      const isValid = (
+        !!recipe
+        && typeof recipe.index !== 'undefined'
+        && typeof recipe.upgrade !== 'undefined'
+        && typeof recipe.downgrade !== 'undefined'
+      );
+      if (isValid) {
+        this.add(recipe);
+      }
     });
   }
 
